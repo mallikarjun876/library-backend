@@ -1,0 +1,6 @@
+let inventory = [ { id: 1, title: "Introduction to Algorithms", author: "Cormen" } ];
+exports.createBook = (req, res) => { const { title, author } = req.body; if (!title || !author) return res.status(400).json({ error: "Missing title/author" ); const newBook = { id: inventory.length + 1, title, author }; inventory.push(newBook); res.status(201).json({ message: "Book created", data: newBook ); };
+exports.getAllBooks = (req, res) => { res.status(200).json({ data: inventory ); };
+exports.getBookById = (req, res) => { const book = inventory.find(b => b.id === parseInt(req.params.id)); if (!book) return res.status(404).json({ error: "Not found" ); res.status(200).json({ data: book ); };
+exports.updateBook = (req, res) => { const idx = inventory.findIndex(b => b.id === parseInt(req.params.id)); if (idx === -1) return res.status(404).json({ error: "Not found" ); inventory[idx] = { ...inventory[idx], ...req.body }; res.status(200).json({ data: inventory[idx] ); };
+exports.deleteBook = (req, res) => { const idx = inventory.findIndex(b => b.id === parseInt(req.params.id)); if (idx === -1) return res.status(404).json({ error: "Not found" ); const del = inventory.splice(idx, 1); res.status(200).json({ deleted: del[0] ); };
